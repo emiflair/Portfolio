@@ -1,0 +1,737 @@
+ <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E M I F E A U S T I N — Software Developer</title>
+  <meta name="description" content="Portfolio of Austin Emife Ogoigbe — Full-Stack Software Developer. React, Node.js, Django, APIs, Docker, Kubernetes, CI/CD." />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------- Global + fluid sizing ---------- */
+    html { scroll-behavior: smooth; }
+    :root{
+      --bg:#0c0c0d; --panel:#131315; --panel-2:#1a1b1d;
+      --ink:#ece8df; --muted:#b9b2a6; --line:#2a2b30;
+      --accent:#e6d3b3; --accent-2:#c9a572;
+      --radius:14px; --shadow:0 20px 50px rgba(0,0,0,.35);
+
+      /* fluid type & spacing */
+      --step--1: clamp(12px, .85rem + .2vw, 14px);
+      --step-0:  clamp(14px, .95rem + .25vw, 16px);
+      --step-1:  clamp(18px, 1rem + .8vw, 20px);
+      --step-2:  clamp(24px, 1.2rem + 1.4vw, 28px);
+      --step-3:  clamp(34px, 1.8rem + 2vw, 44px);
+      --step-4:  clamp(44px, 2.2rem + 3vw, 64px);
+      --wrap-pad: clamp(16px, 3vw, 24px);
+      --gap: clamp(14px, 2.5vw, 20px);
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    body{
+      margin:0;background:var(--bg);color:var(--ink);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-size:var(--step-0); line-height:1.55
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    img{max-width:100%;display:block;height:auto}
+
+    .wrap{max-width:1200px;margin:auto;padding:var(--wrap-pad)}
+    .muted{color:var(--muted)}
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--accent);padding:.6rem 1rem;border-radius:999px;min-height:40px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      background:var(--accent);color:#0b0b0c;border:0;
+      padding:.75rem 1.1rem;border-radius:999px;font-weight:700;
+      min-height:44px; /* better tap target */
+      cursor:pointer;
+      transition:filter 0.2s ease;
+    }
+    .btn:hover{filter:brightness(.95)}
+    .btn.ghost{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+    
+    /* Better touch targets for mobile */
+    @media (max-width: 760px) {
+      .btn, .pill {
+        min-height:48px; /* iOS recommended touch target */
+        padding:.8rem 1.2rem;
+      }
+      nav a {
+        padding:8px 4px; /* easier tapping */
+        min-height:44px;
+        display:flex;
+        align-items:center;
+      }
+    }
+    .card{background:linear-gradient(180deg, var(--panel), var(--panel-2)); border:1px solid var(--line); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow)}
+    .grid{display:grid;gap:var(--gap)}
+    /* responsive grids */
+    .grid.cols-3, .grid.cols-2{grid-template-columns:repeat(auto-fit, minmax(260px,1fr))}
+    .meta{font-size:var(--step--1);color:var(--muted);letter-spacing:.3px}
+
+    /* NAV */
+    header{position:sticky;top:0;z-index:20;background:rgba(12,12,13,.65);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    .nav{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{font-family:"Playfair Display",serif;font-weight:600;letter-spacing:.4px;font-size:clamp(22px, 4vw, 28px);text-decoration:none!important;color:var(--ink)}
+    .logo:hover{text-decoration:none!important;color:var(--ink)}
+    nav{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+    nav a{color:var(--muted);font-weight:600;margin-left:18px;white-space:nowrap}
+    nav a:hover{color:var(--accent)}
+
+    /* ensure anchor jumps aren't hidden by sticky header */
+    section[id]{scroll-margin-top:80px}
+
+    /* HERO */
+    .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+    .hero-inner{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:var(--gap);min-height:70vh}
+    .hero-visual{
+      position:relative;height:100%;min-height:420px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);
+      background:
+        radial-gradient(1200px 600px at 60% 10%, rgba(230,211,179,.08), transparent 60%),
+        radial-gradient(900px 400px at 20% 100%, rgba(230,211,179,.06), transparent 60%),
+        #0a0a0b;
+    }
+    .hero-visual::after{
+      content:"";position:absolute;inset:0;
+      background:
+        linear-gradient(180deg, rgba(10,10,11,.25), rgba(10,10,11,.85)),
+        url('assets/me.png') center/cover no-repeat;
+      mix-blend-mode:screen; opacity:.9;
+    }
+    .eyebrow{color:var(--accent);letter-spacing:.35rem;font-size:var(--step--1);font-weight:700;text-transform:uppercase}
+    .hero h1{font-family:"Playfair Display",serif;font-size:var(--step-4);line-height:1.05;margin:.2em 0 .3em}
+    .hero h1 em{font-style:italic;color:var(--accent)}
+    .lede{color:var(--muted);font-size:var(--step-1);max-width:62ch}
+    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+
+    /* LOGOS STRIP */
+    .logos{display:flex;gap:28px;flex-wrap:wrap;align-items:center;justify-content:center;padding:26px 0;border-bottom:1px solid var(--line)}
+    .logos .logo-chip{opacity:1;filter:none;border:1px solid rgba(255,255,255,0.2);padding:10px 14px;border-radius:10px}
+
+    /* SERVICES */
+    .service h3{margin:6px 0 8px;font-family:"Playfair Display",serif}
+    .service p{margin:0;color:var(--muted)}
+    .service .icon{width:42px;height:42px;border-radius:10px;background:rgba(230,211,179,.08);display:grid;place-items:center;border:1px solid var(--line);margin-bottom:10px}
+
+    /* SELECTED WORK */
+    .section-title{font-family:"Playfair Display",serif;font-size:var(--step-2);margin:0 0 10px}
+    .work {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+      padding: 18px 12px 38px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 370px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .work:hover {
+      box-shadow: 0 8px 32px rgba(230,211,179,0.10), 0 2px 8px rgba(0,0,0,0.18);
+      transform: translateY(-2px) scale(1.01);
+    }
+    .work video, .work img {
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      width: 100%;
+      height: 240px;
+      border-radius: 14px;
+      background: #18181a;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+      display: block;
+      transition: box-shadow 0.2s;
+    }
+    .work .cap {
+      position: static;
+      background: none;
+      color: var(--ink);
+      padding: 0;
+      margin-top: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: left;
+      line-height: 1.4;
+    }
+    .work .cap strong {
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+
+    /* GitHub card button: dark rounded outer with a light inner rectangle and centered circular octocat SVG */
+    .github-btn {
+      --outer-w: 110px;
+      --outer-h: 72px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--outer-w);
+      height: var(--outer-h);
+      padding: 0;
+      border-radius: 18px;
+      background: #18181a;
+      border: 1.5px solid #232326;
+      position: relative;
+      margin-top: 14px;
+      text-decoration: none;
+      transition: box-shadow .12s, transform .12s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.13);
+    }
+    .github-btn-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 48px;
+      background: #ececec;
+      border-radius: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .github-btn svg {
+      display: block;
+      margin: auto;
+      width: 38px;
+      height: 38px;
+    }
+    .github-btn:hover {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .github-btn:focus {
+      outline: 3px solid #e6d3b3;
+      outline-offset: 2px;
+    }
+
+    /* ABOUT SPLIT */
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+    .about-block{padding:22px;border-radius:var(--radius);border:1px solid var(--line);background:linear-gradient(180deg,var(--panel),var(--panel-2))}
+    .kv{display:inline-block;background:#0e0e10;border:1px solid var(--line);padding:8px 12px;border-radius:999px;margin:6px 6px 0 0;color:var(--muted);font-size:13px}
+
+    /* CONTACT / FOOTER */
+    .cta-band{margin-top:30px;padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,var(--panel),var(--panel-2));display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    footer{border-top:1px solid var(--line);padding:20px 0;color:var(--muted);font-size:14px;margin-top:30px}
+
+    /* CERTIFICATE IMAGE RESPONSIVE */
+    .cert-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid #2a2b30;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    /* TECH LOGO STYLES */
+    .tech-logo {
+      width: 60px;
+      height: 40px;
+      object-fit: contain;
+      filter: none !important;
+      opacity: 1 !important;
+      transition: transform 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 6px;
+      padding: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo-chip:hover .tech-logo {
+      transform: scale(1.15);
+      filter: none !important;
+    }
+    
+    .logo-chip {
+      background: rgba(25, 25, 30, 0.8);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      transition: all 0.3s ease;
+      border-radius: 10px;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+    
+    .logo-chip:hover {
+      background: rgba(25, 25, 30, 0.95);
+      border-color: rgba(212, 175, 55, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.15);
+    }
+    
+    /* IMAGE RESPONSIVE STYLES */
+    .responsive-img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* RESPONSIVE BREAKPOINTS */
+    @media (max-width:1100px){
+      .hero-inner{grid-template-columns:1fr;min-height:unset}
+      .hero-visual{min-height:360px;aspect-ratio:16/10;max-width:600px;margin:0 auto}
+      .nav{padding:12px var(--wrap-pad)}
+      .cert-image{max-width:500px}
+    }
+    
+    @media (max-width:900px){
+      .grid.cols-3{grid-template-columns:repeat(auto-fit, minmax(240px,1fr))}
+      .split{grid-template-columns:1fr}
+      .cta-band{flex-direction:column;align-items:flex-start}
+      .hero-visual{max-width:500px}
+      .cert-image{max-width:450px}
+    }
+    
+    @media (max-width:760px){
+      .hero h1{font-size:var(--step-3)}
+      .hero-visual{min-height:350px;max-width:100%;margin:20px 0} /* Larger and full width on mobile */
+      .logos{padding:18px 0;gap:16px}
+      .logos .logo-chip{padding:8px 12px;font-size:12px}
+      .btn{width:100%; justify-content:center} /* full-width buttons on phones */
+      .cta{flex-direction:column}
+      nav{margin-top:8px;width:100%;justify-content:center}
+      nav a{margin-left:12px;margin-right:12px}
+      .cert-image{max-width:350px}
+    }
+    
+    @media (max-width:600px){
+      :root{
+        --wrap-pad: clamp(12px, 4vw, 20px);
+        --gap: clamp(12px, 3vw, 18px);
+      }
+      .hero-inner{gap:30px;text-align:center} /* More gap between content and image */
+      .hero h1{font-size:var(--step-3);line-height:1.1}
+      .hero-visual{min-height:380px;max-width:100%;order:2} /* Make image appear after text content */
+      .lede{font-size:var(--step-0)}
+      .grid.cols-3, .grid.cols-2{grid-template-columns:1fr}
+      .service .icon{margin:0 auto 10px}
+      .service{text-align:center}
+      .about-block{padding:18px}
+      .card{padding:16px}
+      .pill{padding:.5rem .8rem;font-size:13px}
+      .cert-image{max-width:300px}
+      .work img{aspect-ratio:4/3} /* Better aspect ratio for mobile */
+      .work .cap{padding:10px 12px;font-size:14px}
+    }
+    
+    @media (max-width:480px){
+      .nav{flex-direction:column;gap:12px;padding:16px var(--wrap-pad)}
+      .brand{margin-bottom:4px}
+      nav{margin-top:0}
+      .hero-inner{min-height:unset;padding-top:20px;gap:25px} /* Reduce min-height, add more gap */
+      .hero-visual{min-height:320px;max-width:100%} /* Larger image on small phones */
+      .eyebrow{letter-spacing:.25rem}
+      .section-title{font-size:var(--step-1)}
+      .kv{margin:4px 4px 0 0;padding:6px 10px;font-size:12px}
+      .cta-band{padding:20px;text-align:center}
+      .cert-image{max-width:260px}
+    }
+    
+    @media (max-width:320px){
+      .hero-visual{min-height:200px;max-width:250px}
+      .cert-image{max-width:240px}
+      .hero h1{font-size:clamp(28px, 8vw, 34px)}
+    }
+
+    /* Reduced motion accessibility */
+    @media (prefers-reduced-motion: reduce){
+      *{scroll-behavior:auto !important;transition:none !important}
+    }
+    
+    /* UTILITY CLASSES FOR INLINE STYLES */
+    .mt-12 { margin-top: 12px; }
+    .section-padding { padding: 28px 20px; }
+    .section-padding-alt { padding: 10px 20px 28px; }
+    .section-padding-documents { padding: 10px 20px 40px; }
+    .contact-title { margin: .2em 0 0; font-family: 'Playfair Display', serif; }
+    .contact-text { margin: .3em 0 0; }
+    .flex-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+    .doc-buttons { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .doc-section { display: none; margin-top: 20px; }
+    .doc-heading { margin-bottom: 10px; }
+    .doc-text { margin-bottom: 15px; }
+    .meta-text { margin-top: 8px; }
+    .max-width-text { max-width: 68ch; }
+    
+    /* Section-specific padding */
+    .section-padding-services { padding: 28px 20px; }
+    .section-padding-work { padding: 10px 20px 28px; }
+    .section-padding-about { padding: 10px 20px 28px; }
+    .section-padding-documents { padding: 10px 20px 40px; }
+    .contact-heading { margin: .2em 0 0; font-family: 'Playfair Display', serif; }
+    
+    /* Projects grid with larger gap */
+    .projects-grid { gap: 28px; }
+
+    /* Footer social links */
+    .footer-bar {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    .social-links {display:flex;align-items:center;gap:12px}
+    .social-links a {display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;background:#18181a;color:var(--muted);transition:background .2s,transform .2s,color .2s}
+    .social-links a:hover {background:var(--panel-2);transform:translateY(-2px);color:var(--accent)}
+    .social-links svg {width:22px;height:22px;display:block}
+    .sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <a href="/" class="logo" onclick="window.location.reload(); return false;">E M I F E A U S T I N</a>
+      </div>
+      <nav>
+        <a href="#services">SERVICES</a>
+        <a href="#work">PROJECTS</a>
+        <a href="#about">ABOUT</a>
+        <a href="#documents">PROFESSIONAL DOCUMENTS</a>
+        <a href="#contact" class="pill">Let’s Talk</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <div class="eyebrow">Software Developer</div>
+        <h1>Full <em>Stack</em> Software <em>Developer</em></h1>
+
+        <p class="lede">
+          Engineering robust, maintainable solutions powered by React, Node.js, Django, Docker, Kubernetes, and cloud-native practices.
+        </p>
+
+        <!-- LET'S TALK: jump to contact block -->
+        <div class="mt-12">
+          <a class="btn" href="#contact">Let’s Talk</a>
+        </div>
+
+        <div class="cta">
+          <a class="btn ghost" href="#work">View Projects</a>
+          <a class="btn ghost" href="#services">My Services</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- LOGOS -->
+  <div class="wrap logos" aria-label="Technologies and Platforms">
+    <div class="logo-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original-wordmark.svg" alt="React" class="tech-logo" />
+    </div>
+    <div class="logo-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original-wordmark.svg" alt="Node.js" class="tech-logo" />
+    </div>
+    <div class="logo-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original-wordmark.svg" alt="Python" class="tech-logo" />
+    </div>
+    <div class="logo-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript" class="tech-logo" />
+    </div>
+    <div class="logo-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original-wordmark.svg" alt="Docker" class="tech-logo" />
+    </div>
+    <div class="logo-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original-wordmark.svg" alt="PostgreSQL" class="tech-logo" />
+    </div>
+    <div class="logo-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original-wordmark.svg" alt="MongoDB" class="tech-logo" />
+    </div>
+    <div class="logo-chip">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub" class="tech-logo" />
+    </div>
+    <div class="logo-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain-wordmark.svg" alt="Django" class="tech-logo" />
+    </div>
+    <div class="logo-chip">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-plain-wordmark.svg" alt="Kubernetes" class="tech-logo" />
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="services" class="wrap section-padding-services">
+    <div class="grid cols-3">
+      <div class="card service">
+        <div class="icon">🎨</div>
+        <h3>Web Design</h3>
+        <p>Modern, responsive front-ends with clean typography, dark UI themes, and accessible layouts.</p>
+      </div>
+      <div class="card service">
+        <div class="icon">⚙️</div>
+        <h3>Development</h3>
+        <p>Full stack builds with React, Node/Express, Django, and Flask. Robust APIs, testing, and scalable architecture.</p>
+      </div>
+      <div class="card service">
+        <div class="icon">🚀</div>
+        <h3>Performance & Cloud Native</h3>
+        <p>Optimized performance with Docker, Kubernetes, CI/CD, and cloud native practices to ensure reliability and scale.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="work" class="wrap section-padding-work">
+    <h2 class="section-title">Projects</h2>
+
+  <div class="grid cols-2 projects-grid">
+      <article class="work" data-work="1">
+        <video src="assets/videos/work-1.mov" poster="assets/work-1.jpg" preload="none" muted autoplay loop></video>
+        <div class="cap"><strong>Car Dealership</strong> Django, React, Sentiment API</div>
+        <a class="github-btn" href="https://github.com/emiflair/Cardealership.git" target="_blank" rel="noopener" aria-label="View Car Dealership on GitHub">
+          <span class="github-btn-inner">
+            <svg viewBox="0 0 32 32" width="38" height="38" aria-hidden="true" focusable="false">
+              <circle cx="16" cy="16" r="15" fill="#18181a"/>
+              <path fill="#ececec" d="M16 7.5c-4.7 0-8.5 3.8-8.5 8.5 0 3.8 2.5 7 6 8.1.4.1.5-.2.5-.4v-1.5c-2.4.5-2.9-1-2.9-1-.4-.9-1-1.1-1-1.1-.8-.6.1-.6.1-.6.9.1 1.3.9 1.3.9.8 1.3 2.1.9 2.6.7.1-.6.3-.9.5-1.1-1.9-.2-3.9-.9-3.9-4 0-.9.3-1.6.8-2.2-.1-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8.7-.2 1.5-.3 2.2-.3.7 0 1.5.1 2.2.3 1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.2 0 3.1-2 3.8-3.9 4 .3.3.5.7.5 1.4v2c0 .2.1.5.5.4 3.5-1.1 6-4.3 6-8.1 0-4.7-3.8-8.5-8.5-8.5z"/>
+            </svg>
+          </span>
+        </a>
+      </article>
+
+      <article class="work" data-work="2">
+        <video src="assets/videos/work-2.mp4" poster="assets/work-2.jpg" preload="none" muted autoplay loop></video>
+        <div class="cap"><strong>emyAI</strong> Node.js,OpenAI</div>
+        <a class="github-btn" href="https://github.com/emiflair/emiAI.git" target="_blank" rel="noopener" aria-label="View emyAI on GitHub">
+          <span class="github-btn-inner">
+            <svg viewBox="0 0 32 32" width="38" height="38" aria-hidden="true" focusable="false">
+              <circle cx="16" cy="16" r="15" fill="#18181a"/>
+              <path fill="#ececec" d="M16 7.5c-4.7 0-8.5 3.8-8.5 8.5 0 3.8 2.5 7 6 8.1.4.1.5-.2.5-.4v-1.5c-2.4.5-2.9-1-2.9-1-.4-.9-1-1.1-1-1.1-.8-.6.1-.6.1-.6.9.1 1.3.9 1.3.9.8 1.3 2.1.9 2.6.7.1-.6.3-.9.5-1.1-1.9-.2-3.9-.9-3.9-4 0-.9.3-1.6.8-2.2-.1-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8.7-.2 1.5-.3 2.2-.3.7 0 1.5.1 2.2.3 1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.2 0 3.1-2 3.8-3.9 4 .3.3.5.7.5 1.4v2c0 .2.1.5.5.4 3.5-1.1 6-4.3 6-8.1 0-4.7-3.8-8.5-8.5-8.5z"/>
+            </svg>
+          </span>
+        </a>
+      </article>
+
+      <article class="work" data-work="4">
+        <video src="assets/videos/work-3.mp4" poster="assets/work-3.jpg" preload="none" muted autoplay loop></video>
+        <div class="cap"><strong>Restaurant Menu</strong> Static Project</div>
+        <a class="github-btn" href="https://github.com/emiflair/enishdrink.git" target="_blank" rel="noopener" aria-label="View Restaurant Menu on GitHub">
+          <span class="github-btn-inner">
+            <svg viewBox="0 0 32 32" width="38" height="38" aria-hidden="true" focusable="false">
+              <circle cx="16" cy="16" r="15" fill="#18181a"/>
+              <path fill="#ececec" d="M16 7.5c-4.7 0-8.5 3.8-8.5 8.5 0 3.8 2.5 7 6 8.1.4.1.5-.2.5-.4v-1.5c-2.4.5-2.9-1-2.9-1-.4-.9-1-1.1-1-1.1-.8-.6.1-.6.1-.6.9.1 1.3.9 1.3.9.8 1.3 2.1.9 2.6.7.1-.6.3-.9.5-1.1-1.9-.2-3.9-.9-3.9-4 0-.9.3-1.6.8-2.2-.1-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8.7-.2 1.5-.3 2.2-.3.7 0 1.5.1 2.2.3 1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.2 0 3.1-2 3.8-3.9 4 .3.3.5.7.5 1.4v2c0 .2.1.5.5.4 3.5-1.1 6-4.3 6-8.1 0-4.7-3.8-8.5-8.5-8.5z"/>
+            </svg>
+          </span>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ABOUT / STACK -->
+  <section id="about" class="wrap section-padding-about">
+    <div class="split">
+      <div class="about-block">
+        <h2 class="section-title">ABOUT</h2>
+        <p class="muted">
+          With a background in hospitality and a foundation in computer science from my diploma studies,
+          I bring a mix of teamwork, problem solving, and customer focused skills to software development.
+          Recently, I completed IBM’s Full Stack Software Developer Professional Certificate on Coursera,
+          building hands on projects with React, Node.js, Django, and cloud native technologies.
+          I’m passionate about creating reliable applications that scale and excited to apply my technical
+          expertise and collaborative mindset to impactful development roles.
+        </p>
+        <p class="muted">Available for junior/associate roles and select freelance projects.</p>
+      </div>
+      <div class="about-block">
+        <h2 class="section-title">Stack</h2>
+        <div>
+          <span class="kv">React</span><span class="kv">Redux</span><span class="kv">TypeScript (basic)</span>
+          <span class="kv">Node.js</span><span class="kv">Express</span><span class="kv">Python</span>
+          <span class="kv">Django</span><span class="kv">Flask</span><span class="kv">PostgreSQL</span>
+          <span class="kv">MongoDB</span><span class="kv">REST</span><span class="kv">Auth/JWT(basic)</span>
+          <span class="kv">Docker</span><span class="kv">Kubernetes </span><span class="kv">CI/CD (basic)</span>
+          <span class="kv">Git & GitHub</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="cta-band" id="contact">
+      <div>
+        <div class="meta">Let’s build something</div>
+        <h3 class="contact-heading">Have a project in mind?</h3>
+        <p class="muted contact-text">
+          Email <a href="mailto:hello@yourdomain.com">hello@yourdomain.com</a> or connect on LinkedIn.
+        </p>
+      </div>
+      <div class="flex-buttons">
+        <a class="btn" href="mailto:hello@yourdomain.com">Email</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/emifeaustin" target="_blank" rel="noopener">Connect</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFESSIONAL DOCUMENTS -->
+  <section id="documents" class="wrap section-padding-documents">
+    <div class="card">
+      <h2 class="section-title">Professional Documents</h2>
+      <p class="muted max-width-text">
+        Access my professional credentials, resume, and cover letter. These documents showcase my qualifications, 
+        experience, and professional approach to software development.
+      </p>
+
+      <!-- Three document buttons -->
+      <div class="doc-buttons">
+        <button class="btn ghost" type="button" aria-expanded="false" aria-controls="certSection" onclick="toggleDocument(event, 'cert')">
+          📜 Certificates
+        </button>
+        <button class="btn ghost" type="button" aria-expanded="false" aria-controls="resumeSection" onclick="toggleDocument(event, 'resume')">
+          📄 Resume
+        </button>
+        <button class="btn ghost" type="button" aria-expanded="false" aria-controls="coverSection" onclick="toggleDocument(event, 'cover')">
+          ✉️ Cover Letter
+        </button>
+      </div>
+
+      <!-- Certificate Section -->
+      <div id="certSection" class="doc-section">
+        <h3 class="doc-heading">IBM Full Stack Software Developer Professional Certificate</h3>
+        <p class="muted doc-text">
+          <strong>15 courses covering:</strong> HTML/CSS/JS, React, Node/Express, Python/Django, SQL & NoSQL, 
+          Docker, Kubernetes (basics), CI/CD, microservices, security, and cloud-native practices.
+        </p>
+        <img src="assets/IBM.png" alt="IBM Full Stack Certificate" class="cert-image" loading="lazy" />
+        <p class="meta meta-text">
+          <a href="https://www.coursera.org/account/accomplishments/professional-cert/78GQONO70LND" target="_blank" rel="noopener">
+            Verify on Coursera
+          </a>
+        </p>
+      </div>
+
+      <!-- Resume Section -->
+      <div id="resumeSection" class="doc-section">
+        <h3 class="doc-heading">Resume / CV</h3>
+        <p class="muted doc-text">
+          Download my complete resume showcasing my technical skills, project experience, and professional background.
+        </p>
+        <div class="flex-buttons">
+          <a href="#" class="btn" download="Austin-Emife-Resume.pdf">Download PDF</a>
+          <button class="btn ghost" type="button" onclick="previewResume()">Preview Online</button>
+        </div>
+      </div>
+
+      <!-- Cover Letter Section -->
+      <div id="coverSection" class="doc-section">
+        <h3 class="doc-heading">Cover Letter</h3>
+        <p class="muted doc-text">
+          A personalized cover letter highlighting my passion for software development and what I can bring to your team.
+        </p>
+        <div class="flex-buttons">
+          <a href="#" class="btn" download="Austin-Emife-Cover-Letter.pdf">Download PDF</a>
+          <button class="btn ghost" type="button" onclick="previewCoverLetter()">Preview Online</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap footer-bar">
+      <div>© <span id="y"></span> E M I F E A U S T I N. All rights reserved.</div>
+      <div class="social-links" aria-label="Social links">
+        <a href="https://www.linkedin.com/in/emifeaustin" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.77 0 5-2.24 5-5V5c0-2.76-2.23-5-5-5ZM8.34 18.34H5.67V9h2.67v9.34ZM7 7.67c-.86 0-1.56-.7-1.56-1.56 0-.86.7-1.56 1.56-1.56.86 0 1.56.7 1.56 1.56 0 .86-.7 1.56-1.56 1.56ZM18.33 18.34h-2.66v-4.54c0-1.08-.02-2.47-1.5-2.47-1.5 0-1.73 1.17-1.73 2.38v4.63H9.78V9h2.55v1.28h.04c.36-.68 1.25-1.4 2.58-1.4 2.76 0 3.28 1.82 3.28 4.19v5.27Z"/></svg>
+        </a>
+        <a href="https://github.com/emiflair" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16 2C8.3 2 2 8.4 2 16.2c0 6.3 4.1 11.6 9.8 13.5.7.1 1-.3 1-.7v-2.6c-4 .9-4.9-1.9-4.9-1.9-.6-1.5-1.5-2-1.5-2-1.2-.8.1-.8.1-.8 1.3.1 2 1.4 2 1.4 1.2 2.1 3.1 1.5 3.9 1.2.1-.9.5-1.5.9-1.9-3.2-.4-6.6-1.7-6.6-7.3 0-1.6.6-3 1.5-4-.2-.4-.7-1.9.2-3.9 0 0 1.3-.4 4.1 1.5 1.2-.3 2.4-.5 3.6-.5 1.2 0 2.4.2 3.6.5 2.9-1.9 4.1-1.5 4.1-1.5.8 2 .3 3.5.2 3.9.9 1 1.5 2.4 1.5 4 0 5.6-3.4 6.9-6.6 7.3.5.4 1 1.3 1 2.6v3.2c0 .4.3.8 1 .7 5.7-1.9 9.8-7.2 9.8-13.5C30 8.4 23.7 2 16 2Z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Play video on click for each work project
+    // No click-to-play logic needed; videos will autoplay and loop on page load
+    // Disable browser scroll restoration immediately
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    
+    // Toggle document sections (certificates, resume, cover letter)
+    function toggleDocument(ev, docType) {
+      // Hide all document sections first
+      const sections = ['certSection', 'resumeSection', 'coverSection'];
+      const buttons = document.querySelectorAll('[onclick*="toggleDocument"]');
+      
+      sections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section) section.style.display = 'none';
+      });
+      
+      buttons.forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+      });
+      
+      // Show the requested section
+      const targetSection = docType + 'Section';
+      const panel = document.getElementById(targetSection);
+      const btn = ev.currentTarget;
+      
+      if (panel) {
+        panel.style.display = 'block';
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+    
+    // Placeholder functions for resume and cover letter preview
+    function previewResume() {
+      alert('Resume preview functionality would be implemented here. For now, please use the download link.');
+    }
+    
+    function previewCoverLetter() {
+      alert('Cover letter preview functionality would be implemented here. For now, please use the download link.');
+    }
+    
+    // Force page to top - aggressive approach
+    function forceScrollToTop() {
+      // Clear hash first
+      if (window.location.hash) {
+        history.replaceState(null, null, window.location.pathname);
+      }
+      
+      // Multiple scroll methods
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
+      // Force with setTimeout to override browser behavior
+      setTimeout(function() {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }, 1);
+    }
+    
+    // Execute immediately
+    forceScrollToTop();
+    
+    // Before page unload, set scroll position
+    window.addEventListener('beforeunload', function() {
+      window.scrollTo(0, 0);
+    });
+    
+    // On page show (includes refresh and back/forward)
+    window.addEventListener('pageshow', function() {
+      forceScrollToTop();
+    });
+    
+    // When DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      forceScrollToTop();
+      // Set year
+      if (document.getElementById('y')) {
+        document.getElementById('y').textContent = new Date().getFullYear();
+      }
+    });
+    
+    // Final fallback
+    window.addEventListener('load', function() {
+      forceScrollToTop();
+    });
+  </script>
+</body>
+</html>
