@@ -34,8 +34,9 @@
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       font-size:var(--step-0); line-height:1.55
     }
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  nav a:hover, nav a:focus-visible, nav a.active {text-decoration:none!important}
     img{max-width:100%;display:block;height:auto}
 
     .wrap{max-width:1200px;margin:auto;padding:var(--wrap-pad)}
@@ -78,8 +79,13 @@
     .logo{font-family:"Playfair Display",serif;font-weight:600;letter-spacing:.4px;font-size:clamp(22px, 4vw, 28px);text-decoration:none!important;color:var(--ink)}
     .logo:hover{text-decoration:none!important;color:var(--ink)}
     nav{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
-    nav a{color:var(--muted);font-weight:600;margin-left:18px;white-space:nowrap}
-    nav a:hover{color:var(--accent)}
+  nav a{color:var(--muted);font-weight:600;margin-left:0;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;padding:.55rem .95rem;border:1px solid var(--line);border-radius:12px;position:relative;background:rgba(255,255,255,0);transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease),transform .25s var(--ease);text-decoration:none!important}
+  nav a + a {margin-left:14px}
+  nav a:hover, nav a:focus-visible{color:var(--ink);background:linear-gradient(180deg,#18181a,#121213);border-color:#3a3327;text-decoration:none!important}
+  nav a:active{transform:scale(.95);background:linear-gradient(180deg,#1d1d1f,#141415);}
+  nav a.active{color:#0b0b0c;background:linear-gradient(150deg,var(--accent) 0%,#f2e3cc 50%,var(--accent-2) 100%);border-color:var(--accent);font-weight:700;box-shadow:0 4px 18px -6px rgba(230,211,179,.35);text-decoration:none!important}
+  nav a.active:hover{filter:brightness(1.04)}
+  nav a.active:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
 
     /* ensure anchor jumps aren't hidden by sticky header */
     section[id]{scroll-margin-top:80px}
@@ -357,6 +363,61 @@
     .doc-text { margin-bottom: 15px; }
     .meta-text { margin-top: 8px; }
     .max-width-text { max-width: 68ch; }
+    /* ---------- Enhanced Animations & Micro-Interactions ---------- */
+    :root { --ease:cubic-bezier(.4,0,.2,1); }
+    .reveal {opacity:0;transform:translateY(30px);transition:opacity .85s var(--ease),transform .85s var(--ease);}
+    .reveal.visible {opacity:1;transform:translateY(0);}
+    .reveal.fade-scale {transform:translateY(10px) scale(.98);}
+    .reveal.fade-scale.visible {transform:translateY(0) scale(1);} 
+    .reveal.delay-1 {transition-delay:.15s}
+    .reveal.delay-2 {transition-delay:.3s}
+    .reveal.delay-3 {transition-delay:.45s}
+    @media (prefers-reduced-motion: reduce){
+      .reveal, .reveal.fade-scale {opacity:1!important;transform:none!important;}
+      .btn::before, .btn::after {animation:none!important}
+    }
+    /* Button shimmer */
+    .btn {position:relative;overflow:hidden;}
+    .btn::before {content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.35) 45%,rgba(255,255,255,0) 70%);transform:translateX(-120%);}
+    .btn:hover::before {animation:shimmer 1.1s forwards;}
+    @keyframes shimmer {to {transform:translateX(130%);}}
+    /* Ghost btn subtle border glow */
+    .btn.ghost {box-shadow:0 0 0 0 rgba(230,211,179,0.4);transition:box-shadow .4s var(--ease);}
+    .btn.ghost:hover {box-shadow:0 0 0 6px rgba(230,211,179,0.08);}   
+  /* Remove previous underline approach; replaced with boxed buttons above */
+    /* Work card hover elevation refinement */
+    .work {will-change:transform, box-shadow;}
+    .work:hover video {filter:brightness(1.05) saturate(1.1);} 
+    .work video {transition:filter .5s ease;} 
+    /* Parallax helper */
+    .hero[data-parallax] .hero-visual {will-change:transform;transition:transform .2s linear;}
+
+    /* Accent gradient text utility */
+  .accent-gradient {background:linear-gradient(90deg,var(--accent),#f8e7c7 50%,var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+    /* ---------- Attribute-based Animation System ---------- */
+    [data-anim]{opacity:0;--dur:.85s;--delay:0s;transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease),filter var(--dur) var(--ease);will-change:opacity,transform,filter}
+    [data-anim].anim-in{opacity:1;transform:none;filter:none}
+    [data-anim="fade-up"]{transform:translateY(28px)}
+    [data-anim="fade-down"]{transform:translateY(-28px)}
+    [data-anim="fade-left"]{transform:translateX(40px)}
+    [data-anim="fade-right"]{transform:translateX(-40px)}
+    [data-anim="scale-in"]{transform:scale(.92)}
+    [data-anim="blur-up"]{transform:translateY(24px);filter:blur(14px)}
+    [data-anim][data-anim-speed="fast"]{--dur:.55s}
+    [data-anim][data-anim-speed="slow"]{--dur:1.2s}
+    [data-anim-stagger] > *[data-anim-child]{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+    [data-anim-stagger].anim-in > *[data-anim-child]{opacity:1;transform:none}
+    @media (prefers-reduced-motion: reduce){
+      [data-anim],[data-anim-stagger] > *[data-anim-child]{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+    }
+    /* PDF preview styles */
+    .pdf-preview {margin-top:18px;display:none;flex-direction:column;gap:10px}
+    .pdf-actions {display:flex;gap:10px;flex-wrap:wrap}
+    .pdf-frame {width:100%;min-height:70vh;border:1px solid var(--line);border-radius:12px;background:#111}
+    .close-preview {align-self:flex-end}
+    @media (max-width:760px){
+      .pdf-frame {min-height:60vh}
+    }
     
     /* Section-specific padding */
     .section-padding-services { padding: 28px 20px; }
@@ -396,7 +457,7 @@
   </header>
 
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero reveal fade-scale" data-anim="fade-up">
     <div class="wrap hero-inner">
       <div>
         <div class="eyebrow">Software Developer</div>
@@ -422,7 +483,7 @@
   </section>
 
   <!-- LOGOS -->
-  <div class="wrap logos" aria-label="Technologies and Platforms">
+  <div class="wrap logos reveal delay-1" data-anim="scale-in" aria-label="Technologies and Platforms">
     <div class="logo-chip">
       <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original-wordmark.svg" alt="React" class="tech-logo" />
     </div>
@@ -456,7 +517,7 @@
   </div>
 
   <!-- SERVICES -->
-  <section id="services" class="wrap section-padding-services">
+  <section id="services" class="wrap section-padding-services reveal" data-anim="fade-up">
     <div class="grid cols-3">
       <div class="card service">
         <div class="icon">🎨</div>
@@ -477,12 +538,12 @@
   </section>
 
   <!-- PROJECTS -->
-  <section id="work" class="wrap section-padding-work">
+  <section id="work" class="wrap section-padding-work reveal fade-scale" data-anim="fade-up" data-anim-speed="slow">
     <h2 class="section-title">Projects</h2>
 
   <div class="grid cols-2 projects-grid">
       <article class="work" data-work="1">
-        <video src="assets/videos/work-1.mov" poster="assets/work-1.jpg" preload="none" muted autoplay loop></video>
+        <video src="assets/videos/work-1.mp4" poster="assets/work-1.jpg" preload="none" muted autoplay loop></video>
         <div class="cap"><strong>Car Dealership</strong> Django, React, Sentiment API</div>
         <a class="github-btn" href="https://github.com/emiflair/Cardealership.git" target="_blank" rel="noopener" aria-label="View Car Dealership on GitHub">
           <span class="github-btn-inner">
@@ -523,7 +584,7 @@
   </section>
 
   <!-- ABOUT / STACK -->
-  <section id="about" class="wrap section-padding-about">
+  <section id="about" class="wrap section-padding-about reveal" data-anim="fade-up">
     <div class="split">
       <div class="about-block">
         <h2 class="section-title">ABOUT</h2>
@@ -556,18 +617,18 @@
         <div class="meta">Let’s build something</div>
         <h3 class="contact-heading">Have a project in mind?</h3>
         <p class="muted contact-text">
-          Email <a href="mailto:hello@yourdomain.com">hello@yourdomain.com</a> or connect on LinkedIn.
+          Email <a href="mailto:hello@emifeaustin.dev">hello@emifeaustin.dev</a> or connect on LinkedIn.
         </p>
       </div>
       <div class="flex-buttons">
-        <a class="btn" href="mailto:hello@yourdomain.com">Email</a>
+        <a class="btn" href="mailto:hello@emifeaustin.dev">Email</a>
         <a class="btn ghost" href="https://www.linkedin.com/in/emifeaustin" target="_blank" rel="noopener">Connect</a>
       </div>
     </div>
   </section>
 
   <!-- PROFESSIONAL DOCUMENTS -->
-  <section id="documents" class="wrap section-padding-documents">
+  <section id="documents" class="wrap section-padding-documents reveal fade-scale" data-anim="fade-up">
     <div class="card">
       <h2 class="section-title">Professional Documents</h2>
       <p class="muted max-width-text">
@@ -610,8 +671,15 @@
           Download my complete resume showcasing my technical skills, project experience, and professional background.
         </p>
         <div class="flex-buttons">
-          <a href="#" class="btn" download="Austin-Emife-Resume.pdf">Download PDF</a>
-          <button class="btn ghost" type="button" onclick="previewResume()">Preview Online</button>
+          <a href="Austin-Emife-Resume.pdf" class="btn" download>Download PDF</a>
+          <button class="btn ghost" type="button" onclick="previewResume()" aria-expanded="false" aria-controls="resumePreview">Preview Online</button>
+        </div>
+        <div id="resumePreview" class="pdf-preview" role="region" aria-label="Resume PDF Preview">
+          <div class="pdf-actions">
+            <button class="btn ghost close-preview" type="button" onclick="closePreview('resume')">Close ✕</button>
+            <a class="btn" href="Austin-Emife-Resume.pdf" target="_blank" rel="noopener">Open in New Tab</a>
+          </div>
+          <iframe class="pdf-frame" src="" title="Resume PDF inline preview" loading="lazy"></iframe>
         </div>
       </div>
 
@@ -622,8 +690,15 @@
           A personalized cover letter highlighting my passion for software development and what I can bring to your team.
         </p>
         <div class="flex-buttons">
-          <a href="#" class="btn" download="Austin-Emife-Cover-Letter.pdf">Download PDF</a>
-          <button class="btn ghost" type="button" onclick="previewCoverLetter()">Preview Online</button>
+          <a href="Austin-Emife-Cover-Letter.pdf" class="btn" download>Download PDF</a>
+          <button class="btn ghost" type="button" onclick="previewCoverLetter()" aria-expanded="false" aria-controls="coverPreview">Preview Online</button>
+        </div>
+        <div id="coverPreview" class="pdf-preview" role="region" aria-label="Cover Letter PDF Preview">
+          <div class="pdf-actions">
+            <button class="btn ghost close-preview" type="button" onclick="closePreview('cover')">Close ✕</button>
+            <a class="btn" href="Austin-Emife-Cover-Letter.pdf" target="_blank" rel="noopener">Open in New Tab</a>
+          </div>
+            <iframe class="pdf-frame" src="" title="Cover Letter PDF inline preview" loading="lazy"></iframe>
         </div>
       </div>
     </div>
@@ -677,13 +752,42 @@
       }
     }
     
-    // Placeholder functions for resume and cover letter preview
-    function previewResume() {
-      alert('Resume preview functionality would be implemented here. For now, please use the download link.');
+    // PDF preview logic (inline iframe)
+    function previewResume(){
+      openPdfPreview('resume','Austin-Emife-Resume.pdf');
     }
-    
-    function previewCoverLetter() {
-      alert('Cover letter preview functionality would be implemented here. For now, please use the download link.');
+    function previewCoverLetter(){
+      openPdfPreview('cover','Austin-Emife-Cover-Letter.pdf');
+    }
+    function openPdfPreview(type, file){
+      const map = {resume:'resumePreview', cover:'coverPreview'};
+      const id = map[type];
+      if(!id) return;
+      // Close any open previews first
+      Object.values(map).forEach(pid => {
+        const wrap = document.getElementById(pid);
+        if(wrap){wrap.style.display='none'; const iframe = wrap.querySelector('iframe'); if(iframe) iframe.src='';}
+      });
+      const el = document.getElementById(id);
+      if(el){
+        const iframe = el.querySelector('iframe');
+        if(iframe && iframe.src !== file) iframe.src = file + '#view=FitH';
+        el.style.display='flex';
+        const triggerBtn = document.querySelector(`button[onclick*="${type === 'resume' ? 'previewResume' : 'previewCoverLetter'}"]`);
+        if(triggerBtn) triggerBtn.setAttribute('aria-expanded','true');
+        // Scroll into view smoothly
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    }
+    function closePreview(type){
+      const id = type==='resume' ? 'resumePreview' : 'coverPreview';
+      const el = document.getElementById(id);
+      if(el){
+        el.style.display='none';
+        const iframe = el.querySelector('iframe'); if(iframe) iframe.src='';
+        const triggerBtn = document.querySelector(`button[onclick*="${type === 'resume' ? 'previewResume' : 'previewCoverLetter'}"]`);
+        if(triggerBtn) triggerBtn.setAttribute('aria-expanded','false');
+      }
     }
     
     // Force page to top - aggressive approach
@@ -733,5 +837,6 @@
       forceScrollToTop();
     });
   </script>
+  <script src="assets/app.js" defer></script>
 </body>
 </html>
